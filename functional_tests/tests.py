@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 #01_functional_test.py
 
-import unittest
+from django.test import LiveServerTestCase
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-class NewVisitTest(unittest.TestCase):
+class NewVisitTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -21,7 +21,7 @@ class NewVisitTest(unittest.TestCase):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         #Jimmy checks out the web page at:
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         #He notes that the header is called.
         self.assertIn('To-Do', self.browser.title)
@@ -60,12 +60,11 @@ class NewVisitTest(unittest.TestCase):
 
         #Jimmy moves on to different things.
 
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
-
 #log
 #2014-07-31
 #- first test for Test-Django book, p. 6
 #- initial user stories added, p. 14
 #- user is called Jimmy
 #- test implemented as unit test, p. 16
+#- moved to its own folder functional_tests; renamed
+# !from now on changes are tracked in git
