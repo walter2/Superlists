@@ -41,6 +41,8 @@ class NewVisitTest(LiveServerTestCase):
         #When he hits enter, the page updates and shows:
         #'1. Cut the grass in the garden' as an item in the ToDo list.
         inputbox.send_keys(Keys.ENTER)
+        jimmys_list_url = self.browser.current_url
+        self.assertRegex(jimmys_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Cut the grass in the garden')
 
         #The text box is inviting him to write more
@@ -52,7 +54,6 @@ class NewVisitTest(LiveServerTestCase):
         #The page updates and shows now both entries.
         self.check_for_row_in_list_table('1: Cut the grass in the garden')
         self.check_for_row_in_list_table('2: Put the cut grass into the wheelie bin.')
-
 
         #Now a new user, Peter, comes along and visits the site
 
@@ -76,7 +77,7 @@ class NewVisitTest(LiveServerTestCase):
         #Peter gets his own unique URL
         peters_list_url = self.browser.current_url
         self.assertRegex(peters_list_url, '/lists/.+')
-        self.assertNotEqual(peters_list_url, jmmys_list_url)
+        self.assertNotEqual(peters_list_url, jimmys_list_url)
 
         #There is no trace of Jimmy's list on Peter's site
         page_text = self.browser.find_element_by_tag_name('body').text
