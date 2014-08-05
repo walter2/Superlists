@@ -54,11 +54,36 @@ class NewVisitTest(LiveServerTestCase):
         self.check_for_row_in_list_table('2: Put the cut grass into the wheelie bin.')
 
 
-        #Jimmy wonders if the site will remember the items - the site has generated an unique url for him
-        #after a reload of the url the items are still there, the unique url is explained.
-        self.fail('Finish the tests now here.')
+        #Now a new user, Peter, comes along and visits the site
 
-        #Jimmy moves on to different things.
+        ## We use a new browser session to make sure that no information
+        ## of Jimmy is coming through from cookies etc.
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        #Peter is visiting the websiete
+        # and there is no sign of Jimmy's list
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Cut the grass in the garden', page_text)
+        self.assertNotIn('Put the cut grass into the wheelie bin.', page_text)
+
+        #Peter starts his own list
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy milk')
+        inputbox.send_keys(Keys.ENTER)
+
+        #Peter gets his own unique URL
+        peters_list_url = self.browser.current_url
+        self.assertRegex(peters_list_url, '/lists/.+')
+        self.assertNotEqual(peters_list_url, jmmys_list_url)
+
+        #There is no trace of Jimmy's list on Peter's site
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Cut the grass in the garden', page_text)
+        self.assertNotIn('Put the cut grass into the wheelie bin.', page_text)
+
+        #Jimmy and Peter moves on to different things.
 
 #log
 #2014-07-31
