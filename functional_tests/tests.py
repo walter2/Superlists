@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 #01_functional_test.py
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerCase
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-class NewVisitTest(LiveServerTestCase):
+class NewVisitTest(StaticLiveServerCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
+        self.browser.refresh()  #minimizes some of the WinError 10054
         self.browser.quit()
 
     def check_for_row_in_list_table(self, row_text):
