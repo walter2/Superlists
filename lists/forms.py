@@ -1,5 +1,3 @@
-#!/user/bin/python3
-
 from django import forms
 
 from lists.models import Item
@@ -22,6 +20,6 @@ class ItemForm(forms.models.ModelForm):
             'text': {'required': EMPTY_LIST_ERROR}
         }
 
-        def save(self, for_list):
-            self.instance.list = for_list
-            return super().save()
+    def save(self, for_list):
+        self.instance.list = for_list
+        return super().save()
